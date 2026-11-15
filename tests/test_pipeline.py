@@ -242,3 +242,48 @@ def test_gemini_timeout_moves_to_fallback(monkeypatch):
     monkeypatch.setattr(gemini.httpx, "post", fake_post)
     assert gemini._call({}) == "ok"
     assert len(calls) == 2
+
+
+NOTICE = "Dear customer,\nRockfort Diagnostics had a breach. Contact Meena K at dpo@rockfort.example.\nRecords: [TO CONFIRM]"
+
+
+def _fake_translator(drop_first: int = 0):
+    """Stands in for Gemini: 'translates' by uppercasing, which would mangle any name it sees."""
+    calls = []
+
+    def fake(body):
+        calls.append(body)
+        text = body["contents"][0]["parts"][0]["text"].upper()
+        for _ in range(drop_first if len(calls) == 1 else 0):
+            text = text.replace(gemini._marker(1), "", 1)
+        return text
+
+    return fake, calls
+
+
+def test_translate_keeps_names_exactly(monkeypatch):
+    fake, calls = _fake_translator()
+    monkeypatch.setattr(gemini, "_call", fake)
+    out, lost = gemini.translate(NOTICE, "Tamil", ["Rockfort Diagnostics", "Meena K", "dpo@rockfort.example", "", "Absent Name"])
+    sent = calls[0]["contents"][0]["parts"][0]["text"]
+    assert "Rockfort" not in sent and "Meena" not in sent and "[TO CONFIRM]" not in sent  # the model never sees them
+    assert "Rockfort Diagnostics" in out and "Meena K" in out and "dpo@rockfort.example" in out
+    assert "[TO CONFIRM]" in out  # the desk's fill-in counter still works on the translation
+    assert lost == [] and len(calls) == 1
+
+
+def test_translate_retries_once_then_reports_lost_names(monkeypatch):
+    fake, calls = _fake_translator(drop_first=1)
+    monkeypatch.setattr(gemini, "_call", fake)
+    out, lost = gemini.translate(NOTICE, "Tamil", ["Rockfort Diagnostics"])
+    assert len(calls) == 2 and lost == [] and "Rockfort Diagnostics" in out
+
+    monkeypatch.setattr(gemini, "_call", lambda body: "translated without any markers")
+    out, lost = gemini.translate(NOTICE, "Tamil", ["Rockfort Diagnostics"])
+    assert set(lost) == {"Rockfort Diagnostics", "[TO CONFIRM]"}
+
+
+def test_translate_protects_longest_name_first(monkeypatch):
+    monkeypatch.setattr(gemini, "_call", lambda body: body["contents"][0]["parts"][0]["text"])
+    out, lost = gemini.translate("Rockfort Diagnostics and Rockfort", "Tamil", ["Rockfort", "Rockfort Diagnostics"])
+    assert out == "Rockfort Diagnostics and Rockfort" and lost == []

@@ -100,20 +100,47 @@ def incident(numbered_logs: str, first_pass: dict, org: dict) -> dict:
     return json.loads(text)
 
 
-def translate(text: str, language: str) -> str:
-    """Translate a customer notice. Legal meaning must survive, so the prompt forbids additions."""
-    return _call(
-        {
-            "systemInstruction": {
-                "parts": [
-                    {
-                        "text": f"Translate this data-breach notice into simple, respectful {language} "
-                        "that a non-technical person can read. Keep every fact, number, date, name, "
-                        "phone number and email exactly. Add nothing, remove nothing. Output only the translation."
-                    }
-                ]
-            },
-            "contents": [{"role": "user", "parts": [{"text": text}]}],
-            "generationConfig": {"temperature": 0.2},
-        }
-    ).strip()
+# Always protected: the desk counts these markers to show what a person still has to fill in.
+ALWAYS_KEEP = ("[TO CONFIRM]",)
+
+
+def _marker(n: int) -> str:
+    return f"⟦{n}⟧"  # ⟦n⟧: unlikely in a notice, and models copy it as-is
+
+
+def translate(text: str, language: str, keep: tuple[str, ...] | list[str] = ()) -> tuple[str, list[str]]:
+    """Translate a customer notice, keeping names exactly as written.
+
+    Asking the model to keep names is not enough: it writes "Rockfort Diagnostics" in Tamil
+    script. So each protected term is swapped for a marker before the call and put back after.
+    Returns the translation and the protected terms the model failed to carry through
+    (empty when every one survived). A failed term is retried once.
+    """
+    terms = sorted({t.strip() for t in (*keep, *ALWAYS_KEEP) if len(t.strip()) >= 2 and t.strip() in text}, key=len, reverse=True)
+    masked = text
+    for n, term in enumerate(terms, 1):
+        masked = masked.replace(term, _marker(n))
+
+    body = {
+        "systemInstruction": {
+            "parts": [
+                {
+                    "text": f"Translate this data-breach notice into simple, respectful {language} "
+                    "that a non-technical person can read. Keep every fact, number, date, phone number "
+                    "and email exactly. Markers like ⟦1⟧ stand for names: copy every marker exactly, "
+                    "once for each time it appears, and do not translate, explain or remove it. "
+                    "Add nothing, remove nothing. Output only the translation."
+                }
+            ]
+        },
+        "contents": [{"role": "user", "parts": [{"text": masked}]}],
+        "generationConfig": {"temperature": 0.2},
+    }
+    for _attempt in range(2):
+        out = _call(body).strip()
+        lost = [term for n, term in enumerate(terms, 1) if _marker(n) not in out]
+        if not lost:
+            break
+    for n, term in enumerate(terms, 1):
+        out = out.replace(_marker(n), term)
+    return out, lost

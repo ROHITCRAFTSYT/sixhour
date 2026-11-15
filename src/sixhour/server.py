@@ -12,12 +12,13 @@ from collections import deque
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from threading import Lock
+from typing import Annotated
 
 import uvicorn
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, StringConstraints
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from . import __version__, gemini, pipeline
@@ -213,6 +214,7 @@ class AnalyzeRequest(BaseModel):
 class TranslateRequest(BaseModel):
     text: str = Field(min_length=1, max_length=20_000)
     language: str = Field(pattern="^(Hindi|Tamil|Telugu|Kannada|Malayalam|Marathi|Bengali|Gujarati)$")
+    keep: list[Annotated[str, StringConstraints(max_length=200)]] = Field(default_factory=list, max_length=12)
 
 
 @app.get("/healthz")
@@ -249,7 +251,8 @@ def translate(request: TranslateRequest) -> dict:
     if not gemini.available():
         raise HTTPException(503, "Translation needs a Gemini API key (set GEMINI_API_KEY).")
     try:
-        return {"text": gemini.translate(request.text, request.language)}
+        text, not_kept = gemini.translate(request.text, request.language, request.keep)
+        return {"text": text, "not_kept": not_kept}
     except Exception as exc:
         log.warning(json.dumps({"event": "translate_failed", "error": type(exc).__name__}))
         raise HTTPException(502, "The translation service is busy. Try again in a moment.") from None

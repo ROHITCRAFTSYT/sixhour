@@ -275,9 +275,13 @@ $("download").onclick = () => {
 $("translate").onclick = async () => {
   $("translate").disabled = true; $("status").textContent = "Translating";
   try {
-    const out = await api("/api/translate", { text: $("draft").value, language: $("lang").value });
+    // Names stay in English letters so a reader can match them to the company and the people.
+    const keep = ["org-name", "c-name", "c-email", "c-phone"].map((id) => $(id).value.trim()).filter(Boolean);
+    const out = await api("/api/translate", { text: $("draft").value, language: $("lang").value, keep });
     $("draft").value = out.text; state.drafts[tab] = out.text; showConfirm(); save();
-    $("status").textContent = "Translated. Have a native speaker check it before sending.";
+    $("status").textContent = out.not_kept && out.not_kept.length
+      ? "Translated, but check these names, which may have been changed: " + out.not_kept.join(", ") + "."
+      : "Translated. Have a native speaker check it before sending.";
   } catch (e) { $("status").textContent = e.message; }
   finally { $("translate").disabled = false; }
 };

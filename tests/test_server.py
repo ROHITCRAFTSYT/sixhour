@@ -138,3 +138,18 @@ def test_rate_limiter_window():
     assert limiter.check("a", "/r", 1) == 0
     assert limiter.check("a", "/r", 1) >= 1
     assert limiter.check("b", "/r", 1) == 0
+
+
+def test_translate_passes_names_and_reports_losses(client, monkeypatch):
+    monkeypatch.setenv("GEMINI_API_KEY", "test")
+    seen = {}
+
+    def fake(text, language, keep):
+        seen.update(text=text, language=language, keep=keep)
+        return "translated", ["Rockfort"]
+
+    monkeypatch.setattr(server.gemini, "translate", fake)
+    res = client.post("/api/translate", json={"text": "hello Rockfort", "language": "Tamil", "keep": ["Rockfort"]})
+    assert res.json() == {"text": "translated", "not_kept": ["Rockfort"]} and seen["keep"] == ["Rockfort"]
+    assert client.post("/api/translate", json={"text": "x", "language": "Tamil", "keep": ["n" * 201]}).status_code == 422
+    assert client.post("/api/translate", json={"text": "x", "language": "Tamil", "keep": ["a"] * 13}).status_code == 422
