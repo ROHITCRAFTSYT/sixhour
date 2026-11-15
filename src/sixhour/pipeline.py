@@ -6,7 +6,7 @@ import logging
 from datetime import datetime
 
 from . import drafts, gemini, rules
-from .model import clean
+from .model import SEVERITIES, clean
 from .redact import redact
 
 log = logging.getLogger("sixhour")
@@ -14,25 +14,32 @@ MAX_LINES = 4000
 
 
 def _keep_proven_findings(incident: dict, first_pass: dict) -> str:
-    """The model may add findings but may not drop what the rules engine proved from the logs.
+    """The model may add findings or raise severity, but may not drop or lower what the rules
+    engine proved from the logs.
 
     Mutates `incident` in place and returns a note for the reviewer naming anything restored.
     """
-    kept = []
+    changes = []
     if first_pass["personal_data"]["involved"] and not incident["personal_data"]["involved"]:
         incident["personal_data"] = first_pass["personal_data"]
-        kept.append("the personal-data finding")
+        changes.append("left out the personal-data finding")
     missing = [t for t in first_pass["incident_types"] if t not in incident["incident_types"]]
     if missing:
         # A dropped CERT-In category would silently shrink the report, so restore it.
         incident["incident_types"].extend(missing)
-        kept.append("the CERT-In " + ("category" if len(missing) == 1 else "categories") + " " + "; ".join(missing))
+        changes.append("left out the CERT-In " + ("category " if len(missing) == 1 else "categories ") + "; ".join(missing))
+    floor = first_pass["severity"]
+    if SEVERITIES.index(incident["severity"]) < SEVERITIES.index(floor):
+        # Severity feeds "is the affected system critical" in the CERT-In draft; a lower model
+        # rating would quietly soften the report.
+        changes.append(f"rated severity {incident['severity']}, below the rules engine's {floor}")
+        incident["severity"] = floor
     for ip in first_pass["attacker_ips"]:
         if ip not in incident["attacker_ips"]:
             incident["attacker_ips"].append(ip)
-    if not kept:
+    if not changes:
         return ""
-    return "The model left out " + " and ".join(kept) + ", which the rules engine found in the logs; kept for your review."
+    return "Kept the rules-engine findings for your review. The model " + "; it ".join(changes) + "."
 
 
 def run(logs: str, org: dict, noticed_at: datetime, use_model: bool = True) -> dict:

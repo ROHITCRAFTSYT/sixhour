@@ -109,7 +109,7 @@ def test_model_cannot_drop_personal_data_or_invent_evidence(monkeypatch):
     inc = out["incident"]
     # The invented category is dropped; the one the rules engine proved is restored.
     assert inc["incident_types"] == ["Data breach", "Attacks on applications such as e-governance and e-commerce"]
-    assert inc["severity"] == "medium"
+    assert inc["severity"] == "critical"  # invalid model value, rules engine proved 4,188 records
     assert inc["timeline"][0]["evidence_line"] == 0
     assert inc["personal_data"]["involved"] and out["note"]
     assert "45.134.26.9" in inc["attacker_ips"]
@@ -134,6 +134,37 @@ def test_model_cannot_drop_proven_incident_categories(monkeypatch):
     assert len(types) == len(set(types))
     assert "Malicious code" in out["note"] and "personal-data" not in out["note"]
     assert "Malicious code" in out["drafts"]["cert_in"]
+
+
+@pytest.mark.parametrize("model_says", ["low", "medium", "high"])
+def test_model_cannot_lower_severity(monkeypatch, model_says):
+    monkeypatch.setenv("GEMINI_API_KEY", "test")
+    first = rules.analyze(load("ransomware"))
+    assert first["severity"] == "critical"
+    monkeypatch.setattr(gemini, "incident", lambda *args: {**first, "severity": model_says})
+    out = pipeline.run(load("ransomware"), {}, NOTICED)
+    assert out["incident"]["severity"] == "critical"
+    assert f"rated severity {model_says}, below the rules engine's critical" in out["note"]
+    assert "critical to operations: Yes" in out["drafts"]["cert_in"]
+    assert "Severity (our assessment): CRITICAL" in out["drafts"]["cert_in"]
+
+
+def test_model_may_raise_severity(monkeypatch):
+    monkeypatch.setenv("GEMINI_API_KEY", "test")
+    logs = "\n".join(f"2026-11-13 01:00:0{i} WEB-SRV01 Security EventID=4625 Logon failure user=admin src=185.220.101.47" for i in range(6))
+    first = rules.analyze(logs)
+    assert first["severity"] == "medium"
+    monkeypatch.setattr(gemini, "incident", lambda *args: {**first, "severity": "high"})
+    out = pipeline.run(logs, {}, NOTICED)
+    assert out["incident"]["severity"] == "high" and out["note"] == ""
+
+
+def test_note_names_every_restored_finding(monkeypatch):
+    monkeypatch.setenv("GEMINI_API_KEY", "test")
+    monkeypatch.setattr(gemini, "incident", lambda *args: {"title": "x", "severity": "low", "personal_data": {"involved": False}})
+    note = pipeline.run(load("patient-portal"), {}, NOTICED)["note"]
+    for part in ("personal-data finding", "CERT-In categories", "rated severity low"):
+        assert part in note
 
 
 def test_no_note_when_model_agrees_with_rules(monkeypatch):
