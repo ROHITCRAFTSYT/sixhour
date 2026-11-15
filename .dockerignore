@@ -1,6 +1,10 @@
 .venv
 .git
+.github
+.vercel
+.env*
 tests
 submission
 __pycache__
-.env
+.pytest_cache
+.ruff_cache

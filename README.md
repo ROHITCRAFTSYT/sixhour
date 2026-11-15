@@ -75,6 +75,7 @@ logs ──► privacy gateway ──► rules engine ──► Gemini (structur
 - **Logs:** one JSON line per request (id, method, path, status, milliseconds). Never bodies. Every response carries `X-Request-ID`.
 - **Failure:** unhandled errors return a request ID, never a traceback. A Gemini failure falls back to the rules engine.
 - **Browser:** the open incident is kept in `localStorage` so the clocks survive a reload; "Close incident" deletes it.
+- **Container:** a two-stage build installs exactly what `uv.lock` pins (`uv sync --locked`, so a stale lock fails the build). The runtime image has no uv or build tools and runs as a non-root user. After changing dependencies in `pyproject.toml`, run `uv lock` and commit the lock.
 - **CI:** GitHub Actions runs ruff and pytest on Python 3.11 to 3.13 and builds and boots the container. Dependabot watches uv, Actions and the Docker base image.
 - Security policy: [SECURITY.md](SECURITY.md).
 
