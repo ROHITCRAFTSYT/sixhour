@@ -117,4 +117,3 @@ def translate(text: str, language: str) -> str:
             "generationConfig": {"temperature": 0.2},
         }
     ).strip()
-

@@ -10,3 +10,4 @@ submission/idea-deck.html
 
 .vercel
 .env*
+!.env.example

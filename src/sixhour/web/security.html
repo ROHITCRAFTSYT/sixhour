@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Security | SixHour</title>
+<meta name="description" content="Exactly what happens to the logs you give SixHour, and what does not.">
+<meta name="theme-color" content="#e9e1cf">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="mast">
+  <div class="wrap">
+    <a class="logo" href="/" aria-label="SixHour home"><b>Six<i>Hour</i></b><span>Incident desk</span></a>
+    <nav aria-label="Main">
+      <a class="opt" href="/#how">How it works</a>
+      <a class="opt" href="/#pricing">Pricing</a>
+      <a class="opt" href="/security" aria-current="page">Security</a>
+      <a class="btn" href="/app">Open the desk</a>
+    </nav>
+  </div>
+</header>
+<main id="main" class="doc">
+<span class="label">Trust &middot; Security</span>
+<h1>What happens to your logs.</h1>
+<p class="lede">A business in the middle of a breach is being asked to hand its logs to a website. This page says exactly where they go, so you can decide before you paste.</p>
+
+<h2>The path of a log line</h2>
+<table>
+<tr><th>Step</th><th>Where</th><th>What happens</th></tr>
+<tr><td>1</td><td>Your browser</td><td>The logs travel to SixHour over HTTPS. Nothing else on the page talks to any other company: no analytics, no trackers, no third-party scripts or fonts.</td></tr>
+<tr><td>2</td><td>SixHour server, in memory</td><td>Aadhaar, PAN, phone, email and card numbers are replaced with tokens such as &lt;EMAIL_1&gt;. IP addresses and hostnames stay, because they are the evidence.</td></tr>
+<tr><td>3</td><td>SixHour server, in memory</td><td>The rules engine analyses the masked lines. This always runs and uses no AI.</td></tr>
+<tr><td>4</td><td>Google Gemini API, only if AI is on</td><td>The masked lines, the organisation name and the sector are sent to Gemini to write the incident record. Untick "Use Gemini" on the desk and this step is skipped.</td></tr>
+<tr><td>5</td><td>Back to your browser</td><td>The record, clocks and drafts are returned. The server keeps nothing: there is no database and no file is written.</td></tr>
+</table>
+
+<div class="sheet pink">
+<p><strong>Plain warning about the public desk.</strong> When AI is on, masked lines are processed by Google under the Gemini API terms. Masking removes the identifiers listed above, not every sensitive detail a log can hold. If your logs must not leave your control, untick "Use Gemini", or talk to us about a pilot deployment.</p>
+</div>
+
+<h2>What SixHour keeps</h2>
+<ul>
+<li><strong>On our servers:</strong> nothing you paste. Request logs record the time, the path, the response code, how long it took and a request ID. They never record log contents, organisation details or drafts.</li>
+<li><strong>In your browser:</strong> the open incident (masked lines, record, drafts and the details you typed) is saved in this browser's local storage so the clocks survive a reload. "Close incident" on the desk deletes it. It is never sent anywhere.</li>
+<li><strong>Cookies:</strong> none.</li>
+</ul>
+
+<h2>Translation</h2>
+<p>Translating the notice to affected people sends that notice text to Gemini. The notice contains your organisation's name and the contact details you typed, so customers can reach you.</p>
+
+<h2>How the service is built</h2>
+<ul>
+<li>A strict Content-Security-Policy: the pages can load code only from SixHour itself.</li>
+<li>Everything from the logs and the model is written to the page as text, never as HTML.</li>
+<li>Rate limits on the analysis and translation endpoints, and a hard size limit on what can be sent.</li>
+<li>Guardrails between the model and you: evidence that cites a line not in your logs is dropped, and the model cannot remove a personal-data finding the rules engine proved.</li>
+<li>The source is open under the MIT licence. Read it, or run it yourself, on <a href="https://github.com/ROHITCRAFTSYT/sixhour" rel="noopener">GitHub</a>.</li>
+</ul>
+
+<h2>Where it runs</h2>
+<p>The public desk currently runs on Vercel. Pilot deployments are planned for Google Cloud Run in Mumbai (asia-south1), so that processing stays in India, which matters for the CERT-In direction on keeping logs within Indian jurisdiction.</p>
+
+<h2>What SixHour is not</h2>
+<p>It is not a certified security product, and it holds no ISO 27001 or SOC 2 certificate today. It is an early product built in the open. If a certificate is a condition for you, we would rather say so now.</p>
+
+<h2>Found a problem?</h2>
+<p>Report a vulnerability privately through <a href="https://github.com/ROHITCRAFTSYT/sixhour/security/advisories/new" rel="noopener">GitHub security advisories</a>. Please do not open a public issue for a security bug.</p>
+</main>
+<footer class="foot">
+  <div class="wrap">
+    <div class="about">
+      <a class="logo" href="/"><b>Six<i>Hour</i></b></a>
+      <p class="fine">From first alert to filed report, inside the legal clock. Built in India by LorqAI. Drafting aid, not legal advice.</p>
+    </div>
+    <div><h4>Product</h4><ul><li><a href="/app">The desk</a></li><li><a href="/#how">How it works</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
+    <div><h4>Trust</h4><ul><li><a href="/security">Security</a></li><li><a href="/privacy">Privacy</a></li><li><a href="/terms">Terms</a></li></ul></div>
+    <div><h4>Source</h4><ul><li><a href="https://github.com/ROHITCRAFTSYT/sixhour" rel="noopener">GitHub</a></li><li><a href="https://github.com/ROHITCRAFTSYT/sixhour/blob/main/LICENSE" rel="noopener">MIT licence</a></li></ul></div>
+  </div>
+</footer>
+</body>
+</html>

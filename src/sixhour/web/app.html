@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The desk | SixHour</title>
+<meta name="description" content="Paste logs, start the legal clocks, and get a reviewed-by-you CERT-In report and DPDP breach notices.">
+<meta name="theme-color" content="#e9e1cf">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/fonts/bigshoulders.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/site.css">
+<link rel="stylesheet" href="/desk.css">
+</head>
+<body class="desk">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="mast">
+  <div class="wrap">
+    <a class="logo" href="/" aria-label="SixHour home"><b>Six<i>Hour</i></b><span>The desk</span></a>
+    <nav aria-label="Desk">
+      <span class="engine type" id="engine" title="Which analyser produced this result">checking engine</span>
+      <a class="opt" href="/security">Security</a>
+      <button class="btn small quiet" id="clear" type="button" hidden>Close incident</button>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="bench">
+  <section class="intake sheet" aria-labelledby="intake-h">
+    <p class="label">Form A &middot; Intake</p>
+    <h1 id="intake-h">What happened?</h1>
+    <p class="hint">Paste logs from the affected system, drop a log file, or open a sample case.</p>
+    <div class="samples" id="samples"></div>
+
+    <label for="logs">Logs</label>
+    <div class="dropzone" id="dropzone">
+      <textarea id="logs" spellcheck="false" placeholder="Paste firewall, server, web or Google Workspace audit logs here, or drop a .log / .txt / .csv file"></textarea>
+      <div class="drop-hint type" aria-hidden="true">Drop the file to load it</div>
+    </div>
+    <p class="filebar"><label class="filepick type" for="file">Choose a log file</label><input id="file" type="file" accept=".log,.txt,.csv,.json,text/plain"><span class="type" id="linecount"></span></p>
+
+    <div class="grid2">
+      <div><label for="org-name">Organisation</label><input id="org-name" autocomplete="organization" maxlength="200"></div>
+      <div><label for="org-sector">Sector</label><input id="org-sector" maxlength="200"></div>
+      <div><label for="org-location">Location</label><input id="org-location" maxlength="200"></div>
+      <div><label for="noticed">When did you notice it?</label><input id="noticed" type="datetime-local"></div>
+      <div><label for="c-name">Contact person</label><input id="c-name" autocomplete="name" maxlength="200"></div>
+      <div><label for="c-role">Role</label><input id="c-role" maxlength="200"></div>
+      <div><label for="c-phone">Phone</label><input id="c-phone" autocomplete="tel" maxlength="40"></div>
+      <div><label for="c-email">Email</label><input id="c-email" type="email" autocomplete="email" maxlength="200"></div>
+    </div>
+
+    <label class="tick"><input type="checkbox" id="use-model" checked><span>Use Gemini for the analysis <small>Untick to keep the logs away from any AI model and use the rules engine alone.</small></span></label>
+
+    <button id="go" class="btn" type="button">Start the clock</button>
+    <p class="privacy">Aadhaar, PAN, phone, email and card numbers are masked before any line reaches the AI model. Nothing you paste is stored on our servers.</p>
+    <p class="error" id="error" role="alert" hidden></p>
+  </section>
+
+  <section class="idle" id="idle" aria-hidden="true">
+    <div class="sheet pink idle-slip">
+      <p class="label">CERT-In reporting window</p>
+      <div class="bigclock">06:00:00</div>
+      <p>The clock starts from the moment you noticed the incident, not from when you got here. Set that time on the form, then start.</p>
+      <span class="stamp blue">Not started</span>
+    </div>
+  </section>
+
+  <section class="result" id="result" hidden>
+    <div class="clocks" id="clocks" aria-label="Legal deadlines"></div>
+
+    <article class="sheet casefile">
+      <p class="label">Incident record</p>
+      <span class="stamp" id="sev"></span>
+      <h2 id="title"></h2>
+      <p class="summary" id="summary"></p>
+      <p class="note type" id="note" hidden></p>
+      <div class="chips type" id="types"></div>
+      <dl class="facts" id="facts"></dl>
+    </article>
+
+    <div class="cols">
+      <article class="sheet">
+        <p class="label">Timeline, with evidence</p>
+        <ol class="timeline" id="timeline"></ol>
+        <pre class="evidence type" id="evidence" hidden tabindex="0"></pre>
+      </article>
+      <article class="sheet green">
+        <p class="label">Do this now</p>
+        <ul class="checks" id="containment"></ul>
+        <p class="label gap">Not yet known</p>
+        <ul class="plain" id="unknowns"></ul>
+      </article>
+    </div>
+
+    <article class="sheet drafts">
+      <div class="drafts-head">
+        <p class="label">Drafts for your review</p>
+        <span class="stamp blue">Draft<small>not filed</small></span>
+      </div>
+      <div class="tabs" id="tabs" role="tablist"></div>
+      <div class="confirm type" id="confirm" role="status"></div>
+      <textarea id="draft" class="draft" spellcheck="false" aria-label="Draft text"></textarea>
+      <div class="actions">
+        <button class="btn small" id="copy" type="button">Copy</button>
+        <button class="btn small quiet" id="download" type="button">Download .txt</button>
+        <button class="btn small quiet" id="print" type="button">Print dossier</button>
+        <span class="translate" id="translate-box" hidden>
+          <label for="lang">Translate notice to</label>
+          <select id="lang"><option>Tamil</option><option>Hindi</option><option>Telugu</option><option>Kannada</option><option>Malayalam</option><option>Marathi</option><option>Bengali</option><option>Gujarati</option></select>
+          <button class="btn small quiet" id="translate" type="button">Translate</button>
+        </span>
+        <span class="status type" id="status" role="status"></span>
+      </div>
+      <p class="hint">Fields marked [TO CONFIRM] need a person. SixHour never files anything on its own. Drafting aid, not legal advice.</p>
+    </article>
+
+    <div id="print-drafts" class="print-only"></div>
+  </section>
+</main>
+
+<script src="/desk.js" defer></script>
+</body>
+</html>

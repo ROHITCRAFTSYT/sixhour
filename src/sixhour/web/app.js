@@ -1,3 +1,4 @@
+// Legacy: kept only for browsers still holding the pre-0.2 single-page UI in cache. The desk uses desk.js.
 const $ = (id) => document.getElementById(id);
 const el = (tag, text, cls) => { const n = document.createElement(tag); if (text != null) n.textContent = text; if (cls) n.className = cls; return n; };
 const DRAFT_LABELS = { cert_in: "CERT-In report", dpdp_board: "DPDP Board intimation", principal_notice: "Notice to affected people" };

@@ -59,47 +59,47 @@ def cert_in(incident: dict, org: dict, noticed_at: datetime) -> str:
 To: incident@cert-in.org.in
 
 1. REPORTING ORGANISATION
-Name: {org.get('name') or TODO}
-Sector: {org.get('sector') or TODO}
-Address / location: {org.get('location') or TODO}
-Point of contact: {org.get('contact_name') or TODO}, {org.get('contact_role') or TODO}
-Phone: {org.get('contact_phone') or TODO}    Email: {org.get('contact_email') or TODO}
+Name: {org.get("name") or TODO}
+Sector: {org.get("sector") or TODO}
+Address / location: {org.get("location") or TODO}
+Point of contact: {org.get("contact_name") or TODO}, {org.get("contact_role") or TODO}
+Phone: {org.get("contact_phone") or TODO}    Email: {org.get("contact_email") or TODO}
 
 2. TYPE OF INCIDENT (Annexure I)
-{_bullets(incident['incident_types'])}
+{_bullets(incident["incident_types"])}
 
 3. DATE AND TIME
-Incident first observed in logs: {incident['first_malicious_activity'] or TODO}
+Incident first observed in logs: {incident["first_malicious_activity"] or TODO}
 Incident noticed by the organisation: {_fmt(noticed_at)}
 This report due by: {_fmt(noticed_at + timedelta(hours=CERT_IN_HOURS))}
 
 4. AFFECTED SYSTEMS
-{_bullets(incident['affected_assets'])}
+{_bullets(incident["affected_assets"])}
 Operating system / application versions: {TODO}
-Is the affected system critical to operations: {'Yes' if incident['severity'] in ('high', 'critical') else TODO}
+Is the affected system critical to operations: {"Yes" if incident["severity"] in ("high", "critical") else TODO}
 
 5. DESCRIPTION OF THE INCIDENT
-{incident['summary'] or TODO}
+{incident["summary"] or TODO}
 
 Sequence of events:
 {_timeline(incident)}
 
 6. SOURCE OF ATTACK (apparent)
-{_bullets(incident['attacker_ips'], 'Not established from available logs')}
+{_bullets(incident["attacker_ips"], "Not established from available logs")}
 
 7. LIKELY CAUSE / VULNERABILITY EXPLOITED
-{incident['root_cause'] or 'Not yet established'}
+{incident["root_cause"] or "Not yet established"}
 
 8. IMPACT
-Severity (our assessment): {incident['severity'].upper()}
-Personal data involved: {'Yes - ' + ', '.join(incident['personal_data']['categories']) if incident['personal_data']['involved'] else 'No evidence so far'}
+Severity (our assessment): {incident["severity"].upper()}
+Personal data involved: {"Yes - " + ", ".join(incident["personal_data"]["categories"]) if incident["personal_data"]["involved"] else "No evidence so far"}
 Has this occurred before: {TODO}
 
 9. ACTIONS TAKEN / PLANNED
-{_bullets(incident['containment'])}
+{_bullets(incident["containment"])}
 
 10. NOT YET KNOWN
-{_bullets(incident['unknowns'], 'None identified')}
+{_bullets(incident["unknowns"], "None identified")}
 
 11. OTHER AGENCIES INFORMED
 {TODO} (police cyber cell / sector regulator / Data Protection Board)
@@ -114,26 +114,26 @@ def dpdp_board(incident: dict, org: dict, noticed_at: datetime) -> str:
     return f"""INTIMATION OF PERSONAL DATA BREACH TO THE DATA PROTECTION BOARD OF INDIA
 (DPDP Act 2023 s.8(6); DPDP Rules 2025, Rule 7) - draft for review
 
-Data Fiduciary: {org.get('name') or TODO}, {org.get('location') or TODO}
-Contact person: {org.get('contact_name') or TODO} ({org.get('contact_role') or TODO}), {org.get('contact_phone') or TODO}, {org.get('contact_email') or TODO}
+Data Fiduciary: {org.get("name") or TODO}, {org.get("location") or TODO}
+Contact person: {org.get("contact_name") or TODO} ({org.get("contact_role") or TODO}), {org.get("contact_phone") or TODO}, {org.get("contact_email") or TODO}
 
 PART A - INITIAL INTIMATION (send without delay)
-Nature of the breach: {incident['title'] or TODO}
-Extent: {count} individuals' records; data types: {', '.join(pd['categories']) or TODO}
-Timing: began {incident['first_malicious_activity'] or TODO}; became aware {_fmt(noticed_at)}
-Location: {', '.join(incident['affected_assets']) or TODO}
-Likely impact: {_impact(pd['categories'])}
+Nature of the breach: {incident["title"] or TODO}
+Extent: {count} individuals' records; data types: {", ".join(pd["categories"]) or TODO}
+Timing: began {incident["first_malicious_activity"] or TODO}; became aware {_fmt(noticed_at)}
+Location: {", ".join(incident["affected_assets"]) or TODO}
+Likely impact: {_impact(pd["categories"])}
 
 PART B - DETAILED REPORT (due {_fmt(noticed_at + timedelta(hours=DPDP_HOURS))})
 1. Events, circumstances and reasons leading to the breach
 {_timeline(incident)}
-Cause: {incident['root_cause'] or 'Under investigation'}
+Cause: {incident["root_cause"] or "Under investigation"}
 
 2. Measures implemented or proposed to mitigate risk
-{_bullets(incident['containment'])}
+{_bullets(incident["containment"])}
 
 3. Findings regarding the person who caused the breach
-{_bullets(['Apparent source address: ' + ip for ip in incident['attacker_ips']], 'Not established')}
+{_bullets(["Apparent source address: " + ip for ip in incident["attacker_ips"]], "Not established")}
 
 4. Remedial measures to prevent recurrence
 - {TODO}
@@ -142,7 +142,7 @@ Cause: {incident['root_cause'] or 'Under investigation'}
 - Notices sent on: {TODO}; channel: {TODO}; number notified: {TODO}
 
 6. Not yet known
-{_bullets(incident['unknowns'], 'None identified')}
+{_bullets(incident["unknowns"], "None identified")}
 """
 
 
@@ -173,30 +173,30 @@ def principal_notice(incident: dict, org: dict, noticed_at: datetime) -> str:
 
 Dear customer,
 
-We are writing to tell you about a security incident at {org.get('name') or TODO} that involved your personal data.
+We are writing to tell you about a security incident at {org.get("name") or TODO} that involved your personal data.
 
 What happened
-On {incident['first_malicious_activity'] or TODO}, an unauthorised person gained access to our systems. We became aware of this on {_fmt(noticed_at)}.
+On {incident["first_malicious_activity"] or TODO}, an unauthorised person gained access to our systems. We became aware of this on {_fmt(noticed_at)}.
 
 What data was involved
-{_bullets(pd['categories'])}
+{_bullets(pd["categories"])}
 
 What this could mean for you
-{_impact(pd['categories'])}.
+{_impact(pd["categories"])}.
 
 What we have done
-{_bullets(incident['containment'][:4])}
+{_bullets(incident["containment"][:4])}
 We have reported the incident to CERT-In and the Data Protection Board of India.
 
 What you can do
 {_bullets(advice)}
 
 Who to contact
-{org.get('contact_name') or TODO}, {org.get('contact_role') or TODO}
-Phone: {org.get('contact_phone') or TODO}   Email: {org.get('contact_email') or TODO}
+{org.get("contact_name") or TODO}, {org.get("contact_role") or TODO}
+Phone: {org.get("contact_phone") or TODO}   Email: {org.get("contact_email") or TODO}
 
 We are sorry this happened.
-{org.get('name') or TODO}
+{org.get("name") or TODO}
 """
 
 

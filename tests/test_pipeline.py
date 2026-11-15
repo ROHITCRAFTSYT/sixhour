@@ -86,9 +86,7 @@ def test_pipeline_deadlines_and_drafts():
 
 
 def test_no_dpdp_draft_without_personal_data():
-    logs = "\n".join(
-        f"2026-11-13 01:00:0{i} WEB-SRV01 Security EventID=4625 Logon failure user=admin src=185.220.101.47" for i in range(6)
-    )
+    logs = "\n".join(f"2026-11-13 01:00:0{i} WEB-SRV01 Security EventID=4625 Logon failure user=admin src=185.220.101.47" for i in range(6))
     out = pipeline.run(logs, {}, NOTICED)
     assert set(out["drafts"]) == {"cert_in"}
     assert not {d["id"]: d for d in out["deadlines"]}["dpdp"]["applies"]

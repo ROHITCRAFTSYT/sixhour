@@ -260,9 +260,6 @@ def analyze(text: str) -> dict:
     if inc["root_cause"]:
         parts.append("Likely cause: " + cause + ".")
     if personal:
-        parts.append(
-            "Personal data involved: " + ", ".join(categories) + (f" (about {rows} records)." if rows else ".")
-        )
+        parts.append("Personal data involved: " + ", ".join(categories) + (f" (about {rows} records)." if rows else "."))
     inc["summary"] = " ".join(parts)
     return inc
-

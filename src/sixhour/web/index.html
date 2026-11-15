@@ -1,83 +1,339 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-IN">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SixHour - breach-clock copilot</title>
-<link rel="stylesheet" href="app.css">
+<title>SixHour | From first alert to filed report, inside the legal clock</title>
+<meta name="description" content="Indian law gives a business six hours to report a cyber incident to CERT-In. SixHour reads your logs, reconstructs the incident and drafts the CERT-In and DPDP filings while the clock is still running.">
+<meta property="og:title" content="SixHour: breached at 2 a.m., report due by 8">
+<meta property="og:description" content="The incident desk for Indian businesses without a security team. Logs in, CERT-In report and DPDP breach notices out, before the deadline.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#e9e1cf">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/fonts/bigshoulders.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/site.css">
+<link rel="stylesheet" href="/home.css">
 </head>
 <body>
-<header class="top">
-  <div class="brand"><span class="mark">6h</span><div><strong>SixHour</strong><small>From first alert to filed report, inside the legal clock.</small></div></div>
-  <div class="engine" id="engine" title="Which analyzer produced this result">checking engine...</div>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="mast">
+  <div class="wrap">
+    <a class="logo" href="/" aria-label="SixHour home"><b>Six<i>Hour</i></b><span>Incident desk</span></a>
+    <nav aria-label="Main">
+      <a class="opt" href="#how">How it works</a>
+      <a class="opt" href="#pricing">Pricing</a>
+      <a class="opt" href="/security">Security</a>
+      <a class="btn" href="/app">Open the desk</a>
+    </nav>
+  </div>
 </header>
 
-<main>
-  <section class="intake" aria-labelledby="intake-h">
-    <h2 id="intake-h">1. What happened?</h2>
-    <p class="hint">Paste logs from the affected system, or load a sample incident.</p>
-    <div class="samples" id="samples"></div>
-    <label for="logs">Logs</label>
-    <textarea id="logs" spellcheck="false" placeholder="Paste firewall, server, web or Google Workspace audit logs here"></textarea>
+<main id="main">
 
-    <div class="grid2">
-      <div><label for="org-name">Organisation</label><input id="org-name" autocomplete="organization"></div>
-      <div><label for="org-sector">Sector</label><input id="org-sector"></div>
-      <div><label for="org-location">Location</label><input id="org-location"></div>
-      <div><label for="noticed">When did you notice it?</label><input id="noticed" type="datetime-local"></div>
-      <div><label for="c-name">Contact person</label><input id="c-name" autocomplete="name"></div>
-      <div><label for="c-role">Role</label><input id="c-role"></div>
-      <div><label for="c-phone">Phone</label><input id="c-phone" autocomplete="tel"></div>
-      <div><label for="c-email">Email</label><input id="c-email" type="email" autocomplete="email"></div>
-    </div>
-    <button id="go" class="primary">Start the clock and analyse</button>
-    <p class="privacy">Aadhaar, PAN, phone, email and card numbers are masked before any log line reaches the AI model. Nothing you paste is stored.</p>
-    <p class="error" id="error" role="alert" hidden></p>
-  </section>
-
-  <section class="result" id="result" hidden aria-live="polite">
-    <div class="clocks" id="clocks"></div>
-
-    <div class="card">
-      <div class="row"><h2 id="title"></h2><span class="sev" id="sev"></span></div>
-      <p id="summary"></p>
-      <p class="note" id="note" hidden></p>
-      <div class="chips" id="types"></div>
-      <dl class="facts" id="facts"></dl>
-    </div>
-
-    <div class="cols">
-      <div class="card">
-        <h3>Timeline, with evidence</h3>
-        <ol class="timeline" id="timeline"></ol>
-        <pre class="evidence" id="evidence" hidden></pre>
+<section class="hero wrap">
+  <p class="label rise">For Indian businesses with no security team</p>
+  <h1 class="rise">Breached at <span class="nowrap">2 a.m.</span> <span class="due">Report due by&nbsp;8.</span></h1>
+  <div class="hero-body">
+    <div class="pitch rise">
+      <p class="lede">Indian law gives a business <strong>six hours</strong> to report a cyber incident to CERT-In, and <strong>72 hours</strong> to report a personal data breach. Most of that time goes on working out what happened.</p>
+      <p class="lede">SixHour reads the logs, reconstructs the incident, and drafts every filing while the clock is still running.</p>
+      <div class="cta-row">
+        <a class="btn" href="/app?sample=patient-portal">Run a sample breach</a>
+        <a class="btn quiet" href="/app">Paste your own logs</a>
       </div>
-      <div class="card">
-        <h3>Do this now</h3>
-        <ul class="checks" id="containment"></ul>
-        <h3>Not yet known</h3>
-        <ul class="plain" id="unknowns"></ul>
-      </div>
+      <p class="aside type">No sign-up. Nothing you paste is stored.</p>
     </div>
 
-    <div class="card">
-      <h3>Drafts for your review</h3>
-      <div class="tabs" id="tabs" role="tablist"></div>
-      <textarea id="draft" class="draft" spellcheck="false" aria-label="Draft text"></textarea>
-      <div class="actions">
-        <button id="copy">Copy</button>
-        <button id="download">Download .txt</button>
-        <span class="translate" id="translate-box" hidden>
-          <label for="lang" class="inline">Translate notice to</label>
-          <select id="lang"><option>Tamil</option><option>Hindi</option><option>Telugu</option><option>Kannada</option><option>Malayalam</option><option>Marathi</option><option>Bengali</option><option>Gujarati</option></select>
-          <button id="translate">Translate with Gemini</button>
-        </span>
-        <span class="status" id="status" role="status"></span>
+    <aside class="slip sheet pink rise" aria-label="Live six-hour countdown">
+      <div class="holes" aria-hidden="true"><i></i><i></i></div>
+      <p class="label">Slip no. 70B/6 &middot; CERT-In reporting window</p>
+      <p class="slip-q">If you had noticed a breach when this page opened, you would have</p>
+      <div class="bigclock" id="hero-clock" role="timer" aria-live="off">06:00:00</div>
+      <p class="slip-q">left to tell CERT-In.</p>
+      <dl class="slip-rows type">
+        <div><dt>Noticed</dt><dd id="hero-noticed">--</dd></div>
+        <div><dt>Report due</dt><dd id="hero-due">--</dd></div>
+      </dl>
+      <span class="stamp thunk">Clock running<small>IT Act s.70B(6)</small></span>
+    </aside>
+  </div>
+</section>
+
+<div class="tape" aria-hidden="true">
+  <div class="tape-run type">
+    <span>01:52:10 TALLY-SRV01 EventID=4625 Logon failure user=admin src=185.220.101.47</span>
+    <span>02:14:07 portal GET /report?id=4471 200 user=&lt;EMAIL_1&gt;</span>
+    <span>02:14:09 portal GET /report?id=4472 200 user=&lt;EMAIL_1&gt;</span>
+    <span>02:31:44 vssadmin delete shadows /all /quiet</span>
+    <span>03:02:18 mail rule created: forward all to &lt;EMAIL_7&gt;</span>
+    <span>03:40:55 drive download KYC_batch_11.zip actor=&lt;EMAIL_3&gt; ip=91.92.243.160</span>
+    <span>01:52:10 TALLY-SRV01 EventID=4625 Logon failure user=admin src=185.220.101.47</span>
+    <span>02:14:07 portal GET /report?id=4471 200 user=&lt;EMAIL_1&gt;</span>
+    <span>02:14:09 portal GET /report?id=4472 200 user=&lt;EMAIL_1&gt;</span>
+    <span>02:31:44 vssadmin delete shadows /all /quiet</span>
+    <span>03:02:18 mail rule created: forward all to &lt;EMAIL_7&gt;</span>
+    <span>03:40:55 drive download KYC_batch_11.zip actor=&lt;EMAIL_3&gt; ip=91.92.243.160</span>
+  </div>
+</div>
+
+<section class="clocks wrap" id="clocks">
+  <div class="sec-head">
+    <p class="label">Section 1 &middot; The law</p>
+    <h2>Two clocks start the moment you notice.</h2>
+  </div>
+  <div class="clock-pair">
+    <article class="sheet pink form reveal">
+      <header><span class="label">Clock A</span><span class="label">In force since 2022</span></header>
+      <p class="hours">6<small>hours</small></p>
+      <h3>CERT-In incident report</h3>
+      <p>Every organisation in India must report listed cyber incidents to CERT-In within six hours of noticing them. Ransomware, data breaches, phishing, unauthorised access and 16 other categories are on the list.</p>
+      <p class="cite type">CERT-In Directions, 28 April 2022 &middot; IT Act s.70B(6)</p>
+    </article>
+    <article class="sheet green form reveal">
+      <header><span class="label">Clock B</span><span class="label">In force 13 May 2027</span></header>
+      <p class="hours">72<small>hours</small></p>
+      <h3>Personal data breach report</h3>
+      <p>If personal data was touched, the Data Protection Board and every affected person must be told without delay, with a detailed report to the Board inside 72 hours. The penalty for failing to give notice runs up to Rs 200 crore.</p>
+      <p class="cite type">DPDP Act 2023 &middot; DPDP Rules 2025, Rule 7</p>
+    </article>
+  </div>
+  <p class="margin-note">A large company has a security operations centre and a law firm on call for this. A 40-person exporter, diagnostic lab or loan agency has one IT person and a folder of logs nobody can read.</p>
+</section>
+
+<section class="how wrap" id="how">
+  <div class="sec-head">
+    <p class="label">Section 2 &middot; The desk</p>
+    <h2>What happens after you paste the logs.</h2>
+  </div>
+
+  <ol class="steps">
+    <li class="reveal">
+      <span class="num">1</span>
+      <div class="say">
+        <h3>Personal data is blacked out first</h3>
+        <p>Aadhaar, PAN, phone, email and card numbers are masked before a single line reaches an AI model. The same value always gets the same token, so the trail can still be followed. IP addresses stay: they are the evidence.</p>
       </div>
-      <p class="hint">Fields marked [TO CONFIRM] need a person. SixHour never files anything on its own.</p>
+      <figure class="exhibit sheet" id="redact-demo">
+        <figcaption class="label">Exhibit A &middot; privacy gateway</figcaption>
+        <p class="type logline">02:14:07 portal login ok user=<span class="pii" data-token="&lt;EMAIL_1&gt;">meena.k@rockfort.example</span> phone=<span class="pii" data-token="&lt;PHONE_1&gt;">98430 12345</span> aadhaar=<span class="pii" data-token="&lt;AADHAAR_1&gt;">2345 6789 0123</span> from 45.134.26.9</p>
+      </figure>
+    </li>
+    <li class="reveal">
+      <span class="num">2</span>
+      <div class="say">
+        <h3>The incident is reconstructed, with proof</h3>
+        <p>A rules engine and Gemini work out what happened, when, from where, on which systems, and whether personal data was touched. Every event on the timeline points at the log line that shows it. No line, no claim.</p>
+      </div>
+      <figure class="exhibit sheet">
+        <figcaption class="label">Exhibit B &middot; timeline</figcaption>
+        <ul class="mini-timeline type">
+          <li><time>02:14:07</time><span>Attacker starts walking report IDs</span><b>line 41</b></li>
+          <li class="hit"><time>02:14:09</time><span>4,188 patient reports fetched</span><b>line 42</b></li>
+          <li><time>02:51:30</time><span>Traffic stops</span><b>line 4230</b></li>
+        </ul>
+      </figure>
+    </li>
+    <li class="reveal">
+      <span class="num">3</span>
+      <div class="say">
+        <h3>Both clocks start, and stay in front of you</h3>
+        <p>The six-hour CERT-In clock always runs. The 72-hour DPDP clock starts only if the logs show personal data was involved. Close the tab, come back, and they are still counting.</p>
+      </div>
+      <figure class="exhibit sheet">
+        <figcaption class="label">Exhibit C &middot; deadlines</figcaption>
+        <div class="mini-clocks">
+          <div class="pink"><b>04:12:39</b><span class="type">CERT-In</span></div>
+          <div class="green"><b>70:12:39</b><span class="type">DPDP Board</span></div>
+        </div>
+      </figure>
+    </li>
+    <li class="reveal">
+      <span class="num">4</span>
+      <div class="say">
+        <h3>The filings are drafted</h3>
+        <p>The CERT-In incident report, the Data Protection Board intimation and the notice to affected people, in plain language and in the customer's language: Hindi, Tamil, Telugu, Kannada, Malayalam, Marathi, Bengali or Gujarati. Anything the logs cannot establish is marked for a person to confirm. It is never guessed.</p>
+      </div>
+      <figure class="exhibit sheet draftsheet">
+        <figcaption class="label">Exhibit D &middot; draft</figcaption>
+        <pre class="type">CERT-In INCIDENT REPORT
+Type: Data breach
+Attacker address: 45.134.26.9
+Records: approximately 4188
+OS versions: <mark>[TO CONFIRM]</mark></pre>
+        <span class="stamp blue thunk">Draft<small>for review</small></span>
+      </figure>
+    </li>
+    <li class="reveal">
+      <span class="num">5</span>
+      <div class="say">
+        <h3>Your IT person gets the next hour's checklist</h3>
+        <p>Concrete containment steps, most urgent first: which machine to pull off the network, which account to lock, which address to block.</p>
+      </div>
+      <figure class="exhibit sheet">
+        <figcaption class="label">Exhibit E &middot; do this now</figcaption>
+        <ul class="mini-checks">
+          <li class="done">Block 45.134.26.9 at the firewall</li>
+          <li class="done">Take the report portal offline</li>
+          <li>Reset every portal session</li>
+        </ul>
+      </figure>
+    </li>
+  </ol>
+</section>
+
+<section class="orders" id="checked">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="label">Section 3 &middot; Standing orders</p>
+      <h2>Built to be checked, not trusted.</h2>
     </div>
-  </section>
+    <ol class="order-list">
+      <li><b>A person files. Always.</b> SixHour drafts. It never sends anything to a regulator or a customer on its own.</li>
+      <li><b>No citation, no claim.</b> Evidence that points at a line that is not in your logs is thrown away before you see it.</li>
+      <li><b>The model cannot erase a finding.</b> If the rules engine proved personal data was touched, an AI answer cannot quietly remove it.</li>
+      <li><b>The clock never waits for AI.</b> If Gemini is slow or down, the rules engine result is shown instead, and says so.</li>
+      <li><b>Nothing is stored.</b> No account, no database. The open incident lives in your browser until you clear it.</li>
+    </ol>
+    <p class="order-foot"><a href="/security">Read exactly what happens to your logs</a></p>
+  </div>
+</section>
+
+<section class="cases wrap" id="cases">
+  <div class="sec-head">
+    <p class="label">Section 4 &middot; Fire drill</p>
+    <h2>Open a case file and watch it work.</h2>
+    <p class="sub">Three fictional incidents with realistic logs. Each one runs the whole desk in about twenty seconds.</p>
+  </div>
+  <div class="folders">
+    <a class="folder reveal" href="/app?sample=ransomware">
+      <span class="tab type">Case 01</span>
+      <h3>Ransomware on the accounts server</h3>
+      <p>A textile exporter in Coimbatore. Brute-forced remote login, shadow copies deleted, Tally data encrypted.</p>
+      <span class="go type">Open file &raquo;</span>
+    </a>
+    <a class="folder reveal" href="/app?sample=patient-portal">
+      <span class="tab type">Case 02</span>
+      <h3>Patient reports scraped from a lab portal</h3>
+      <p>A diagnostic lab in Tiruchirappalli. One address walks through 4,188 report links in half an hour.</p>
+      <span class="go type">Open file &raquo;</span>
+    </a>
+    <a class="folder reveal" href="/app?sample=workspace-phish">
+      <span class="tab type">Case 03</span>
+      <h3>Phished employee, KYC files downloaded</h3>
+      <p>A loan agency in Chennai. A stolen Workspace login, a hidden mail rule, and customer KYC leaving by Drive.</p>
+      <span class="go type">Open file &raquo;</span>
+    </a>
+  </div>
+</section>
+
+<section class="pricing wrap" id="pricing">
+  <div class="sec-head">
+    <p class="label">Section 5 &middot; Schedule of fees</p>
+    <h2>Priced for a business, not a bank.</h2>
+  </div>
+  <div class="fees">
+    <article class="sheet fee reveal">
+      <p class="label">Open now</p>
+      <h3>The desk</h3>
+      <p class="price">Rs 0</p>
+      <ul>
+        <li>Paste or drop logs, no sign-up</li>
+        <li>Both legal clocks</li>
+        <li>All three drafts, eight languages</li>
+        <li>Printable incident dossier</li>
+      </ul>
+      <a class="btn small" href="/app">Open the desk</a>
+    </article>
+    <article class="sheet green fee reveal">
+      <p class="label">Pilot businesses first</p>
+      <h3>Ready</h3>
+      <p class="price">Rs 1,499 <small>a month per business</small></p>
+      <ul>
+        <li>Log connectors: Google Workspace, firewall, Tally server</li>
+        <li>Evidence vault with 180-day retention</li>
+        <li>Breach-readiness checklist</li>
+        <li>A breach drill every month</li>
+      </ul>
+      <a class="btn small quiet" href="#pilot">Ask about a pilot</a>
+    </article>
+    <article class="sheet pink fee reveal">
+      <p class="label">Pilot businesses first</p>
+      <h3>Incident pack</h3>
+      <p class="price">Rs 24,999 <small>per real incident</small></p>
+      <ul>
+        <li>Full analysis of the incident</li>
+        <li>Every regulatory filing and customer notice</li>
+        <li>30 days of follow-up</li>
+      </ul>
+      <a class="btn small quiet" href="#pilot">Ask about a pilot</a>
+    </article>
+  </div>
+  <p class="margin-note">Ready and the Incident pack are being built with a first group of pilot businesses and the CA firms and IT vendors who serve them. The prices above are the planned prices.</p>
+</section>
+
+<section class="faq wrap" id="faq">
+  <div class="sec-head">
+    <p class="label">Section 6 &middot; Questions</p>
+    <h2>Asked before the first pilot.</h2>
+  </div>
+  <div class="qa">
+    <details>
+      <summary>Is this legal advice?</summary>
+      <p>No. The drafts follow the structure of the CERT-In incident reporting form and DPDP Rule 7, and they are drafting aids. A person at your business, ideally with your lawyer or CA, reviews and files them.</p>
+    </details>
+    <details>
+      <summary>Does SixHour send the report to CERT-In for me?</summary>
+      <p>No, by design. You copy, download or print the draft and file it yourself. The CERT-In draft carries the address it goes to.</p>
+    </details>
+    <details>
+      <summary>What happens to the logs I paste?</summary>
+      <p>They are masked on our server, analysed, and discarded when the response is sent. Nothing is written to a database. When AI analysis is on, the masked lines go to Google's Gemini API. You can switch AI off on the desk and use the rules engine alone. <a href="/security">Full detail here.</a></p>
+    </details>
+    <details>
+      <summary>Which logs does it understand?</summary>
+      <p>Windows security events, web server access logs, Google Workspace audit logs and firewall or syslog lines. The rules engine looks for brute-force logins, ransomware behaviour, SQL injection, phishing sign-ins, hidden mail rules, bulk record access and unusual outbound transfers. Gemini reads everything else in context.</p>
+    </details>
+    <details>
+      <summary>The DPDP rules are not in force yet. Why show that clock?</summary>
+      <p>The breach-reporting duty under Rule 7 starts on 13 May 2027. The CERT-In six-hour duty has applied since 2022. Showing both today means the process is practised before the second one carries a penalty.</p>
+    </details>
+    <details>
+      <summary>What if the AI gets it wrong?</summary>
+      <p>Every timeline event links to its log line, so a wrong claim is visible in one click. Claims without a real line are removed, and the deterministic rules engine runs on every incident as a second opinion.</p>
+    </details>
+  </div>
+</section>
+
+<section class="pilot wrap" id="pilot">
+  <div class="sheet pilot-card">
+    <div>
+      <p class="label">Pilot programme</p>
+      <h2>Run your next drill with us.</h2>
+      <p>We are looking for diagnostic labs, clinics, loan agencies, schools, exporters, and the CA firms and IT vendors who look after them. Tell us what your logs look like and we will run a breach drill on your own systems.</p>
+    </div>
+    <div class="pilot-actions">
+      <a class="btn" href="https://www.linkedin.com/in/rohitmadhavan" rel="noopener">Message the founder</a>
+      <a class="btn quiet" href="https://github.com/ROHITCRAFTSYT/sixhour" rel="noopener">Read the code</a>
+    </div>
+    <span class="stamp thunk">Pilots open<small>2026</small></span>
+  </div>
+</section>
+
 </main>
-<script src="app.js"></script>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="about">
+      <a class="logo" href="/"><b>Six<i>Hour</i></b></a>
+      <p class="fine">From first alert to filed report, inside the legal clock. Built in India by LorqAI. Drafting aid, not legal advice.</p>
+    </div>
+    <div><h4>Product</h4><ul><li><a href="/app">The desk</a></li><li><a href="/#how">How it works</a></li><li><a href="/#pricing">Pricing</a></li></ul></div>
+    <div><h4>Trust</h4><ul><li><a href="/security">Security</a></li><li><a href="/privacy">Privacy</a></li><li><a href="/terms">Terms</a></li></ul></div>
+    <div><h4>Source</h4><ul><li><a href="https://github.com/ROHITCRAFTSYT/sixhour" rel="noopener">GitHub</a></li><li><a href="https://github.com/ROHITCRAFTSYT/sixhour/blob/main/LICENSE" rel="noopener">MIT licence</a></li></ul></div>
+  </div>
+</footer>
+
+<script src="/home.js" defer></script>
 </body>
 </html>
