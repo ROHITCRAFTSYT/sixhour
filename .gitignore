@@ -5,3 +5,5 @@ __pycache__/
 *.egg-info/
 dist/
 submission/FORM-ANSWERS.md
+submission/template/
+submission/idea-deck.html
