@@ -2,6 +2,8 @@
 
 **From first alert to filed report, inside the legal clock.**
 
+**Live demo:** https://sixhour-ashen.vercel.app (try https://sixhour-ashen.vercel.app/?sample=patient-portal). Hosted on Vercel while the Cloud Run deployment is set up; it runs the offline rules engine until a Gemini key is configured.
+
 When an Indian business is breached, two clocks start:
 
 | Clock | Law | Deadline |
@@ -62,7 +64,11 @@ logs ──► privacy gateway ──► rules engine ──► Gemini (structur
 - `drafts.py` - the model extracts facts, fixed templates carry the legal structure. Unknown fields are marked `[TO CONFIRM]`, never guessed.
 - `server.py` + `web/` - FastAPI and a dependency-free UI. Stateless: nothing pasted is stored.
 
-## Deploy on Google Cloud
+## Deploy
+
+Vercel: `vercel deploy --prod` (entrypoint `app.py`).
+
+Google Cloud Run:
 
 ```bash
 gcloud run deploy sixhour --source . --region asia-south1 --allow-unauthenticated \

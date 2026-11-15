@@ -7,3 +7,6 @@ dist/
 submission/FORM-ANSWERS.md
 submission/template/
 submission/idea-deck.html
+
+.vercel
+.env*
