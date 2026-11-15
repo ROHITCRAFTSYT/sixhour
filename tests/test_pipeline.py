@@ -107,11 +107,41 @@ def test_model_cannot_drop_personal_data_or_invent_evidence(monkeypatch):
     monkeypatch.setattr(gemini, "incident", fake)
     out = pipeline.run(load("patient-portal"), {}, NOTICED)
     inc = out["incident"]
-    assert inc["incident_types"] == ["Data breach"]
+    # The invented category is dropped; the one the rules engine proved is restored.
+    assert inc["incident_types"] == ["Data breach", "Attacks on applications such as e-governance and e-commerce"]
     assert inc["severity"] == "medium"
     assert inc["timeline"][0]["evidence_line"] == 0
     assert inc["personal_data"]["involved"] and out["note"]
     assert "45.134.26.9" in inc["attacker_ips"]
+
+
+def test_model_cannot_drop_proven_incident_categories(monkeypatch):
+    """Live regression: on the ransomware sample the model answered with one category."""
+    monkeypatch.setenv("GEMINI_API_KEY", "test")
+    monkeypatch.setattr(
+        gemini,
+        "incident",
+        lambda *args: {
+            "title": "Ransomware",
+            "incident_types": ["Unauthorised access of IT systems/data"],
+            "personal_data": {"involved": True},
+        },
+    )
+    out = pipeline.run(load("ransomware"), {"name": "Kovai Tex"}, NOTICED)
+    types = out["incident"]["incident_types"]
+    assert types[0] == "Unauthorised access of IT systems/data"  # the model's own finding stays first
+    assert any(t.startswith("Malicious code") for t in types) and "Data breach" in types
+    assert len(types) == len(set(types))
+    assert "Malicious code" in out["note"] and "personal-data" not in out["note"]
+    assert "Malicious code" in out["drafts"]["cert_in"]
+
+
+def test_no_note_when_model_agrees_with_rules(monkeypatch):
+    monkeypatch.setenv("GEMINI_API_KEY", "test")
+    first = rules.analyze(load("ransomware"))
+    monkeypatch.setattr(gemini, "incident", lambda *args: {**first, "incident_types": list(reversed(first["incident_types"]))})
+    out = pipeline.run(load("ransomware"), {}, NOTICED)
+    assert out["note"] == "" and out["engine"] != "rules"
 
 
 def test_model_failure_falls_back_to_rules(monkeypatch):
