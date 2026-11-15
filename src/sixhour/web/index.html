@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SixHour - breach-clock copilot</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="mark">6h</span><div><strong>SixHour</strong><small>From first alert to filed report, inside the legal clock.</small></div></div>
+  <div class="engine" id="engine" title="Which analyzer produced this result">checking engine...</div>
+</header>
+
+<main>
+  <section class="intake" aria-labelledby="intake-h">
+    <h2 id="intake-h">1. What happened?</h2>
+    <p class="hint">Paste logs from the affected system, or load a sample incident.</p>
+    <div class="samples" id="samples"></div>
+    <label for="logs">Logs</label>
+    <textarea id="logs" spellcheck="false" placeholder="Paste firewall, server, web or Google Workspace audit logs here"></textarea>
+
+    <div class="grid2">
+      <div><label for="org-name">Organisation</label><input id="org-name" autocomplete="organization"></div>
+      <div><label for="org-sector">Sector</label><input id="org-sector"></div>
+      <div><label for="org-location">Location</label><input id="org-location"></div>
+      <div><label for="noticed">When did you notice it?</label><input id="noticed" type="datetime-local"></div>
+      <div><label for="c-name">Contact person</label><input id="c-name" autocomplete="name"></div>
+      <div><label for="c-role">Role</label><input id="c-role"></div>
+      <div><label for="c-phone">Phone</label><input id="c-phone" autocomplete="tel"></div>
+      <div><label for="c-email">Email</label><input id="c-email" type="email" autocomplete="email"></div>
+    </div>
+    <button id="go" class="primary">Start the clock and analyse</button>
+    <p class="privacy">Aadhaar, PAN, phone, email and card numbers are masked before any log line reaches the AI model. Nothing you paste is stored.</p>
+    <p class="error" id="error" role="alert" hidden></p>
+  </section>
+
+  <section class="result" id="result" hidden aria-live="polite">
+    <div class="clocks" id="clocks"></div>
+
+    <div class="card">
+      <div class="row"><h2 id="title"></h2><span class="sev" id="sev"></span></div>
+      <p id="summary"></p>
+      <p class="note" id="note" hidden></p>
+      <div class="chips" id="types"></div>
+      <dl class="facts" id="facts"></dl>
+    </div>
+
+    <div class="cols">
+      <div class="card">
+        <h3>Timeline, with evidence</h3>
+        <ol class="timeline" id="timeline"></ol>
+        <pre class="evidence" id="evidence" hidden></pre>
+      </div>
+      <div class="card">
+        <h3>Do this now</h3>
+        <ul class="checks" id="containment"></ul>
+        <h3>Not yet known</h3>
+        <ul class="plain" id="unknowns"></ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Drafts for your review</h3>
+      <div class="tabs" id="tabs" role="tablist"></div>
+      <textarea id="draft" class="draft" spellcheck="false" aria-label="Draft text"></textarea>
+      <div class="actions">
+        <button id="copy">Copy</button>
+        <button id="download">Download .txt</button>
+        <span class="translate" id="translate-box" hidden>
+          <label for="lang" class="inline">Translate notice to</label>
+          <select id="lang"><option>Tamil</option><option>Hindi</option><option>Telugu</option><option>Kannada</option><option>Malayalam</option><option>Marathi</option><option>Bengali</option><option>Gujarati</option></select>
+          <button id="translate">Translate with Gemini</button>
+        </span>
+        <span class="status" id="status" role="status"></span>
+      </div>
+      <p class="hint">Fields marked [TO CONFIRM] need a person. SixHour never files anything on its own.</p>
+    </div>
+  </section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

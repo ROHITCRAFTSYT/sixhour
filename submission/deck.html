@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SixHour pitch deck</title>
+<style>
+@page { size: 1280px 720px; margin: 0; }
+:root { --ink:#1c1b19; --muted:#6a665e; --line:#e2ddd2; --bg:#f6f4ef; --red:#b3261e; --chip:#efe9dc; --ok:#1e6b3a; --mono: Consolas, "Cascadia Mono", monospace; }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: #888; }
+body { font: 22px/1.45 "Segoe UI", system-ui, sans-serif; color: var(--ink); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.s { width: 1280px; height: 720px; background: var(--bg); padding: 56px 72px; position: relative; overflow: hidden; page-break-after: always; break-after: page; margin: 0 auto 20px; }
+@media print { .s { margin: 0; } html, body { background: var(--bg); } }
+.k { font: 700 15px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--red); margin-bottom: 10px; }
+h1 { font-size: 46px; line-height: 1.12; margin: 0 0 22px; letter-spacing: -.01em; }
+h2 { font-size: 26px; margin: 0 0 8px; }
+p { margin: 0 0 14px; }
+.muted { color: var(--muted); }
+.n { position: absolute; bottom: 26px; right: 40px; font: 14px var(--mono); color: var(--muted); }
+.logo { position: absolute; bottom: 24px; left: 72px; font: 700 14px var(--mono); color: var(--muted); }
+.logo b { background: var(--red); color: #fff; padding: 2px 5px; border-radius: 4px; margin-right: 6px; }
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.g3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 22px 24px; }
+.big { font: 700 56px/1 var(--mono); color: var(--red); margin-bottom: 8px; }
+.card p { font-size: 19px; }
+ul { margin: 0; padding-left: 24px; } li { margin: 0 0 8px; }
+.small { font-size: 17px; }
+.tag { display: inline-block; font: 700 13px var(--mono); padding: 3px 8px; border-radius: 6px; background: var(--chip); margin-right: 6px; }
+.tag.live { background: var(--ok); color: #fff; } .tag.plan { background: var(--chip); color: var(--muted); }
+table { border-collapse: collapse; width: 100%; font-size: 18px; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 14px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+td.y { color: var(--ok); font-weight: 700; } td.x { color: var(--muted); }
+.title { background: #1c1b19; color: #f1ede4; display: flex; flex-direction: column; justify-content: center; }
+.title .mark { font: 700 64px var(--mono); background: var(--red); color: #fff; display: inline-block; padding: 10px 18px; border-radius: 14px; margin-bottom: 30px; width: max-content; }
+.title h1 { font-size: 72px; margin: 0 0 14px; color: #fff; }
+.title p { font-size: 28px; color: #c9c3b6; max-width: 900px; }
+.title .meta { position: absolute; bottom: 48px; left: 72px; font-size: 18px; color: #a39d90; }
+.shot { width: 100%; border-radius: 12px; border: 1px solid var(--line); display: block; }
+.clock { font: 700 120px/1 var(--mono); color: var(--red); letter-spacing: -.02em; }
+svg text { font-family: "Segoe UI", system-ui, sans-serif; }
+.quote { font-size: 30px; line-height: 1.35; border-left: 6px solid var(--red); padding-left: 24px; margin: 18px 0 30px; }
+</style>
+</head>
+<body>
+
+<!-- 1 -->
+<section class="s title">
+  <div class="mark">6h</div>
+  <h1>SixHour</h1>
+  <p>The incident responder India's small businesses don't have. From first alert to a filed CERT-In report and DPDP breach notice, inside the legal clock.</p>
+  <div class="meta">Startup Buildathon India 2026 &nbsp;·&nbsp; Rohit Madhavan, Tiruchirappalli &nbsp;·&nbsp; Built on Gemini + Google Cloud</div>
+</section>
+
+<!-- 2 problem -->
+<section class="s">
+  <div class="k">The problem</div>
+  <h1>When a small business is hacked, two legal clocks start. Nobody in the office can read the logs.</h1>
+  <div class="g2" style="margin-top:28px">
+    <div class="card">
+      <div class="big">6 h</div>
+      <h2>CERT-In incident report</h2>
+      <p class="muted">CERT-In Directions, 28 Apr 2022 (IT Act s.70B). Applies to every body corporate. Report within 6 hours of noticing; keep 180 days of logs in India.</p>
+    </div>
+    <div class="card">
+      <div class="big">72 h</div>
+      <h2>DPDP breach report</h2>
+      <p class="muted">DPDP Rules 2025, Rule 7 (in force 13 May 2027). Tell the Data Protection Board and every affected person without delay; detailed report in 72 hours. Penalty ceiling up to ₹200 crore.</p>
+    </div>
+  </div>
+  <p style="margin-top:26px">A 40-person exporter, diagnostic lab or loan agency has <b>one IT person</b>, no SOC, no lawyer on call. Today they either miss the deadline, file nothing, or call a consultant after the clock has already run out.</p>
+  <div class="logo"><b>6h</b>SixHour</div><div class="n">2</div>
+</section>
+
+<!-- 3 why now -->
+<section class="s">
+  <div class="k">Why now</div>
+  <h1>Incidents are doubling, and the penalties are about to get real.</h1>
+  <div class="g3" style="margin-top:30px">
+    <div class="card"><div class="big">20.4 L</div><p>cyber security incidents tracked by CERT-In in 2024, up from 13.9 lakh in 2022 (Govt. replies in Parliament).</p></div>
+    <div class="card"><div class="big">8.8 Cr</div><p>enterprises registered on Udyam (June 2026). Most hold customer data: phone numbers, IDs, health and loan records.</p></div>
+    <div class="card"><div class="big">May '27</div><p>DPDP breach-notice duty becomes enforceable. Every business handling personal data needs a breach process before then.</p></div>
+  </div>
+  <p style="margin-top:28px" class="muted">ESET's SMB survey (2024): 88% of Indian SMBs reported a cyber incident in the past 12 months; 43% rank lacking a security team among their top three challenges.</p>
+  <div class="logo"><b>6h</b>SixHour</div><div class="n">3</div>
+</section>
+
+<!-- 4 solution -->
+<section class="s">
+  <div class="k">The product</div>
+  <h1>Paste the logs. Get the incident, the clock, and the filings.</h1>
+  <div class="g2" style="margin-top:10px; grid-template-columns: 1.05fr 1fr; align-items:start">
+    <ol style="padding-left:28px; font-size:21px">
+      <li><b>Privacy first.</b> Aadhaar, PAN, phone, email and card numbers are masked before any line reaches a model.</li>
+      <li><b>Reconstructs the attack</b> with Gemini: what, when, from where, which systems, was personal data touched. Every finding links to the log line that proves it.</li>
+      <li><b>Starts both clocks</b> and shows time left.</li>
+      <li><b>Drafts the filings:</b> CERT-In report, Data Protection Board intimation, and a plain-language notice to affected people in Tamil, Hindi and 6 more languages.</li>
+      <li><b>Tells the IT person what to do in the next hour.</b></li>
+    </ol>
+    <div class="card" style="padding:26px">
+      <p class="muted small" style="margin-bottom:6px">Lab portal scraped overnight. Noticed 9:00 am.</p>
+      <div class="clock" style="font-size:84px">05:59:31</div>
+      <p class="small muted">until the CERT-In report is due</p>
+      <p class="small" style="margin-top:14px">4,188 patient reports · 1 attacker IP · cause: missing ownership check on the reports API · 3 drafts ready for review</p>
+      <p class="small muted">A human reviews and files. SixHour never files on its own.</p>
+    </div>
+  </div>
+  <div class="logo"><b>6h</b>SixHour</div><div class="n">4</div>
+</section>
+
+<!-- 5 demo -->
+<section class="s" style="padding:40px 56px">
+  <div class="k">Working prototype</div>
+  <img class="shot" src="img/patient-portal.png" alt="SixHour analysing a scraped patient portal: two countdown clocks, incident summary, timeline with log-line evidence, containment checklist and draft filings" style="height:600px; object-fit:cover; object-position:top">
+  <div class="n">5</div>
+</section>
+
+<!-- 6 architecture -->
+<section class="s">
+  <div class="k">Technical architecture</div>
+  <h1 style="font-size:38px">Gemini reasons. Rules and templates keep it honest.</h1>
+  <svg viewBox="0 0 1136 360" width="1136" height="360" role="img" aria-label="Architecture: log sources go through a privacy gateway, a rules engine and Gemini on Cloud Run, then guardrails, producing the incident record, clocks and drafts">
+    <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#6a665e"/></marker></defs>
+    <g font-size="15" fill="#1c1b19">
+      <rect x="0" y="40" width="170" height="250" rx="12" fill="#fff" stroke="#e2ddd2"/>
+      <text x="16" y="70" font-weight="700">Log sources</text>
+      <text x="16" y="100">Paste / upload</text><text x="16" y="126">Workspace audit*</text><text x="16" y="152">Firewall syslog*</text><text x="16" y="178">Windows / Sysmon</text><text x="16" y="204">Web server logs</text><text x="16" y="230">Gemini Live voice*</text>
+
+      <rect x="214" y="40" width="880" height="250" rx="14" fill="none" stroke="#b3261e" stroke-dasharray="6 5"/>
+      <text x="230" y="30" font-weight="700" fill="#b3261e">Google Cloud Run · asia-south1 (Mumbai) · data stays in India</text>
+
+      <rect x="232" y="70" width="160" height="110" rx="12" fill="#fff" stroke="#e2ddd2"/>
+      <text x="246" y="98" font-weight="700">Privacy gateway</text><text x="246" y="124">Mask Aadhaar, PAN,</text><text x="246" y="146">phone, email, card</text><text x="246" y="168" fill="#6a665e">Gemma on-prem*</text>
+
+      <rect x="420" y="70" width="160" height="110" rx="12" fill="#fff" stroke="#e2ddd2"/>
+      <text x="434" y="98" font-weight="700">Rules engine</text><text x="434" y="124">Deterministic first</text><text x="434" y="146">pass, always runs,</text><text x="434" y="168">offline fallback</text>
+
+      <rect x="608" y="70" width="180" height="110" rx="12" fill="#1c1b19"/>
+      <text x="622" y="98" font-weight="700" fill="#fff">Gemini</text><text x="622" y="124" fill="#e9e4d8">Structured output,</text><text x="622" y="146" fill="#e9e4d8">20 CERT-In types,</text><text x="622" y="168" fill="#e9e4d8">cited log lines</text>
+
+      <rect x="816" y="70" width="160" height="110" rx="12" fill="#fff" stroke="#e2ddd2"/>
+      <text x="830" y="98" font-weight="700">Guardrails</text><text x="830" y="124">Drop uncited claims</text><text x="830" y="146">Never downgrade a</text><text x="830" y="168">proven finding</text>
+
+      <rect x="232" y="210" width="230" height="64" rx="12" fill="#fff" stroke="#e2ddd2"/>
+      <text x="246" y="236" font-weight="700">Deadline engine</text><text x="246" y="258">CERT-In 6 h · DPDP 72 h</text>
+      <rect x="480" y="210" width="290" height="64" rx="12" fill="#fff" stroke="#e2ddd2"/>
+      <text x="494" y="236" font-weight="700">Filing templates</text><text x="494" y="258">CERT-In · DPB · notice + translation</text>
+      <rect x="788" y="210" width="290" height="64" rx="12" fill="#fff" stroke="#e2ddd2"/>
+      <text x="802" y="236" font-weight="700">Evidence vault*</text><text x="802" y="258">Cloud Storage, 180-day retention lock</text>
+
+      <path d="M170 125H226M392 125H414M580 125H602M788 125H810" stroke="#6a665e" stroke-width="2" marker-end="url(#a)"/>
+      <path d="M896 180V196H347V204" stroke="#6a665e" stroke-width="2" fill="none" marker-end="url(#a)"/>
+      <path d="M625 196V204M933 196V204" stroke="#6a665e" stroke-width="2" marker-end="url(#a)"/>
+      <text x="0" y="330" fill="#6a665e" font-size="15">* planned for the buildathon. Everything else runs today: FastAPI on a Docker image ready for Cloud Run, Gemini REST with response schema, 12 tests incl. guardrail tests.</text>
+    </g>
+  </svg>
+  <div class="logo"><b>6h</b>SixHour</div><div class="n">6</div>
+</section>
+
+<!-- 7 google AI -->
+<section class="s">
+  <div class="k">Use of Google AI</div>
+  <h1>Each model does the job it is best at.</h1>
+  <table>
+    <tr><th style="width:24%">Google AI / Cloud</th><th>What it does in SixHour</th><th style="width:14%">Status</th></tr>
+    <tr><td><b>Gemini</b></td><td>Reads thousands of mixed log lines, reconstructs the attack, classifies it into the CERT-In categories via response schema, cites evidence lines</td><td><span class="tag live">built</span></td></tr>
+    <tr><td><b>Gemini</b> (multilingual)</td><td>Translates the breach notice into Tamil, Hindi, Telugu, Kannada, Malayalam, Marathi, Bengali, Gujarati with facts kept exact</td><td><span class="tag live">built</span></td></tr>
+    <tr><td><b>Gemma</b></td><td>Runs the privacy gateway on the customer's own machine, so raw logs never leave the office</td><td><span class="tag plan">buildathon</span></td></tr>
+    <tr><td><b>Gemini Live</b></td><td>Owner calls at 2 a.m. and describes what they see; SixHour asks the right questions and starts the clock</td><td><span class="tag plan">buildathon</span></td></tr>
+    <tr><td><b>Cloud Run · Secret Manager · Cloud Storage</b></td><td>Stateless API in Mumbai region; keys in Secret Manager; evidence vault with 180-day retention lock</td><td><span class="tag live">ready</span></td></tr>
+    <tr><td><b>Google AI Studio · Antigravity</b></td><td>Prompt and schema iteration; agentic build workflow at the city buildathon</td><td><span class="tag plan">buildathon</span></td></tr>
+  </table>
+  <div class="logo"><b>6h</b>SixHour</div><div class="n">7</div>
+</section>
+
+<!-- 8 market & business -->
+<section class="s">
+  <div class="k">Market and business model</div>
+  <h1>Sold through the people SMBs already trust with compliance.</h1>
+  <div class="g2" style="margin-top:12px">
+    <div class="card">
+      <h2>Who pays</h2>
+      <ul class="small">
+        <li><b>First segment:</b> data-heavy SMBs in Tier 2/3 cities: diagnostic labs and clinics, NBFC/loan DSAs, schools and coaching centres, D2C brands, exporters</li>
+        <li><b>Channel:</b> CA firms and local IT/MSP vendors who already file GST and run their servers; cyber-insurance brokers (a filed report speeds up claims)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>Pricing (to validate)</h2>
+      <ul class="small">
+        <li><b>Ready plan</b> ₹1,499/month: log connectors, evidence vault, breach-readiness checklist, unlimited drills</li>
+        <li><b>Incident pack</b> ₹24,999 per real incident: full analysis, all filings, 30 days of follow-up</li>
+        <li><b>Partner plan</b> for MSPs and CA firms managing 20+ clients</li>
+      </ul>
+    </div>
+  </div>
+  <p class="small muted" style="margin-top:22px">Sizing assumption to test: 1 lakh paying SMBs at ₹18k/year = ₹180 crore ARR. Validation plan: 15 interviews with labs, DSAs and MSPs in Trichy, Coimbatore and Chennai before the city buildathon.</p>
+  <div class="logo"><b>6h</b>SixHour</div><div class="n">8</div>
+</section>
+
+<!-- 9 competition -->
+<section class="s">
+  <div class="k">Landscape</div>
+  <h1>Big companies have a SOC and a law firm. Everyone else has nothing.</h1>
+  <table>
+    <tr><th></th><th>Enterprise MDR / SOC</th><th>Cyber law consultants</th><th>DPDP consent platforms</th><th>SixHour</th></tr>
+    <tr><td>Price for a 40-person firm</td><td class="x">annual enterprise contract</td><td class="x">billed per incident</td><td class="x">annual licence</td><td class="y">₹1,499/month</td></tr>
+    <tr><td>Reads raw logs</td><td class="y">yes</td><td class="x">no</td><td class="x">no</td><td class="y">yes</td></tr>
+    <tr><td>Drafts CERT-In + DPB filings</td><td class="x">partly</td><td class="y">yes, slowly</td><td class="x">no</td><td class="y">yes, in minutes</td></tr>
+    <tr><td>Notice in Indian languages</td><td class="x">no</td><td class="x">rarely</td><td class="x">partly</td><td class="y">8 languages</td></tr>
+    <tr><td>Works within 6 hours, 2 a.m.</td><td class="y">yes</td><td class="x">no</td><td class="x">no</td><td class="y">yes</td></tr>
+  </table>
+  <p class="small muted" style="margin-top:18px">Category comparison; competitor pricing to be confirmed in customer interviews.</p>
+  <div class="logo"><b>6h</b>SixHour</div><div class="n">9</div>
+</section>
+
+<!-- 10 roadmap -->
+<section class="s">
+  <div class="k">Plan</div>
+  <h1>What exists, what the buildathon adds, what comes after.</h1>
+  <div class="g3">
+    <div class="card"><h2>Today</h2><ul class="small">
+      <li>Working web app, 3 realistic incident samples (ransomware, API scraping, phishing)</li>
+      <li>Privacy gateway, rules engine, Gemini analysis with guardrails</li>
+      <li>Both clocks, 3 filing drafts, 8-language notice</li>
+      <li>12 automated tests, Cloud Run-ready image</li></ul></div>
+    <div class="card"><h2>20–21 Nov</h2><ul class="small">
+      <li>Deploy on Cloud Run, Mumbai</li>
+      <li>Google Workspace audit-log connector</li>
+      <li>Gemma privacy gateway agent for Windows servers</li>
+      <li>Gemini Live voice intake</li>
+      <li>Evidence vault with retention lock</li></ul></div>
+    <div class="card"><h2>Next 90 days</h2><ul class="small">
+      <li>10 design partners via 2 MSPs and 1 CA firm in Tamil Nadu</li>
+      <li>Breach drills: monthly simulated incident per customer</li>
+      <li>Firewall syslog + Tally server connectors</li>
+      <li>Legal review of templates with a cyber-law firm</li></ul></div>
+  </div>
+  <div class="logo"><b>6h</b>SixHour</div><div class="n">10</div>
+</section>
+
+<!-- 11 founder -->
+<section class="s">
+  <div class="k">Founder</div>
+  <h1>Rohit Madhavan</h1>
+  <p style="font-size:24px">Security analyst and AI engineer, Tiruchirappalli.</p>
+  <div class="g2" style="margin-top:18px">
+    <div class="card"><h2>Why me</h2><ul class="small">
+      <li>Security analyst by profession: reads the same alerts and logs SixHour reads</li>
+      <li>Built <b>SOC-Triage-Gym</b>, an environment for training AI agents on SOC alert triage</li>
+      <li>Built <b>Readback</b> (Meta AI Hackathon 2026): real-time detector for air-traffic readback errors, fine-tuned 30B model, 175 tests</li></ul></div>
+    <div class="card"><h2>Why this</h2><ul class="small">
+      <li>Lives where the customers are: Tier 2 Tamil Nadu, where businesses run on one IT vendor and a CA</li>
+            <li>Ships fast and verifies: every claim the product makes cites its evidence</li></ul></div>
+  </div>
+  <div class="logo"><b>6h</b>SixHour</div><div class="n">11</div>
+</section>
+
+<!-- 12 close -->
+<section class="s title">
+  <div class="mark">6h</div>
+  <h1 style="font-size:56px">Every Indian business will need a breach process by May 2027.</h1>
+  <p>SixHour makes it a product they can afford.</p>
+  <div class="meta">github.com/ROHITCRAFTSYT/sixhour &nbsp;·&nbsp; rohitmadhavan.vercel.app</div>
+</section>
+
+</body>
+</html>

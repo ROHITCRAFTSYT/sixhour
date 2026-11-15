@@ -1,0 +1,22 @@
+2026-11-13 01:52:10 TALLY-SRV01 Security EventID=4625 Logon failure user=administrator src=185.220.101.47 logon_type=10
+2026-11-13 01:52:11 TALLY-SRV01 Security EventID=4625 Logon failure user=admin src=185.220.101.47 logon_type=10
+2026-11-13 01:52:13 TALLY-SRV01 Security EventID=4625 Logon failure user=tally src=185.220.101.47 logon_type=10
+2026-11-13 01:52:14 TALLY-SRV01 Security EventID=4625 Logon failure user=accounts src=185.220.101.47 logon_type=10
+2026-11-13 01:52:16 TALLY-SRV01 Security EventID=4625 Logon failure user=accounts src=185.220.101.47 logon_type=10
+2026-11-13 01:52:19 TALLY-SRV01 Security EventID=4625 Logon failure user=accounts src=185.220.101.47 logon_type=10
+2026-11-13 01:58:42 TALLY-SRV01 Security EventID=4625 Logon failure user=accounts src=185.220.101.47 logon_type=10
+2026-11-13 02:03:27 TALLY-SRV01 Security EventID=4624 Logon success user=accounts src=185.220.101.47 logon_type=10
+2026-11-13 02:05:02 TALLY-SRV01 Security EventID=4720 User account created name=svc_backup2 by=accounts
+2026-11-13 02:05:09 TALLY-SRV01 Security EventID=4732 Member added to Administrators group member=svc_backup2 by=accounts
+2026-11-13 02:11:40 TALLY-SRV01 Sysmon EventID=1 Process create image=C:\Users\accounts\Downloads\netscan.exe user=accounts
+2026-11-13 02:19:55 TALLY-SRV01 Sysmon EventID=3 Network connect image=C:\Windows\System32\mstsc.exe dst=192.168.1.20 dst_host=FILE-NAS01 port=3389
+2026-11-13 02:31:18 TALLY-SRV01 Sysmon EventID=1 Process create image=C:\Windows\System32\vssadmin.exe cmdline="vssadmin delete shadows /all /quiet" user=svc_backup2
+2026-11-13 02:31:44 TALLY-SRV01 Sysmon EventID=1 Process create image=C:\ProgramData\lb3.exe user=svc_backup2
+2026-11-13 02:32:03 TALLY-SRV01 Sysmon EventID=11 File created path=D:\TallyData\10001\Company.900.lockbit
+2026-11-13 02:32:03 TALLY-SRV01 Sysmon EventID=11 File created path=D:\TallyData\10001\TranMgr.900.lockbit
+2026-11-13 02:32:05 TALLY-SRV01 Sysmon EventID=11 File created path=D:\Payroll\salary_2026_10_with_bank_ac_and_PAN.xlsx.lockbit
+2026-11-13 02:32:09 FILE-NAS01 Sysmon EventID=11 File created path=E:\Share\Customers\buyer_master_contacts.xlsx.lockbit
+2026-11-13 02:32:40 TALLY-SRV01 Sysmon EventID=11 File created path=D:\TallyData\README-RESTORE-FILES.txt
+2026-11-13 02:33:12 FW-EDGE allow src=192.168.1.10 dst=185.220.101.47 dport=443 bytes_out=1873204112 app=ssl
+2026-11-13 08:47:30 TALLY-SRV01 Application Tally.ERP error "Unable to open company data: file format not recognised" user=priya.k
+2026-11-13 08:49:02 HELPDESK ticket=INC-2291 opened_by=priya.k@kovaitex.example "Tally not opening, all files show .lockbit, phone 9843012345"

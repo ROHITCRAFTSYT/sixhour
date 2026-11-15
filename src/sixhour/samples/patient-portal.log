@@ -1,0 +1,22 @@
+103.21.58.14 - - [12/Nov/2026:23:41:07 +0530] "GET /login HTTP/1.1" 200 1843 "-" "Mozilla/5.0"
+103.21.58.14 - - [12/Nov/2026:23:41:31 +0530] "POST /api/login HTTP/1.1" 200 312 "-" "Mozilla/5.0" user=ramesh.v@gmail.com
+103.21.58.14 - - [12/Nov/2026:23:42:02 +0530] "GET /api/reports/48211 HTTP/1.1" 200 20417 "-" "Mozilla/5.0"
+45.134.26.9 - - [12/Nov/2026:23:58:44 +0530] "GET /api/reports/1 HTTP/1.1" 401 77 "-" "python-requests/2.32"
+45.134.26.9 - - [12/Nov/2026:23:59:10 +0530] "POST /api/login HTTP/1.1" 200 309 "-" "python-requests/2.32" user=test.signup88@proton.me
+45.134.26.9 - - [12/Nov/2026:23:59:12 +0530] "GET /api/reports/48300 HTTP/1.1" 200 19822 "-" "python-requests/2.32"
+45.134.26.9 - - [12/Nov/2026:23:59:13 +0530] "GET /api/reports/48299 HTTP/1.1" 200 21004 "-" "python-requests/2.32"
+45.134.26.9 - - [12/Nov/2026:23:59:13 +0530] "GET /api/reports/48298 HTTP/1.1" 200 18650 "-" "python-requests/2.32"
+45.134.26.9 - - [12/Nov/2026:23:59:14 +0530] "GET /api/reports/48297 HTTP/1.1" 200 22310 "-" "python-requests/2.32"
+45.134.26.9 - - [12/Nov/2026:23:59:14 +0530] "GET /api/reports/48296 HTTP/1.1" 200 20991 "-" "python-requests/2.32"
+45.134.26.9 - - [12/Nov/2026:23:59:15 +0530] "GET /api/reports/48295 HTTP/1.1" 200 19034 "-" "python-requests/2.32"
+45.134.26.9 - - [12/Nov/2026:23:59:15 +0530] "GET /api/reports/48294 HTTP/1.1" 200 20118 "-" "python-requests/2.32"
+45.134.26.9 - - [12/Nov/2026:23:59:16 +0530] "GET /api/reports/48293 HTTP/1.1" 200 21876 "-" "python-requests/2.32"
+45.134.26.9 - - [13/Nov/2026:00:00:01 +0530] "GET /api/patients?page=1&size=500 HTTP/1.1" 200 412044 "-" "python-requests/2.32"
+45.134.26.9 - - [13/Nov/2026:00:00:04 +0530] "GET /api/patients?page=2&size=500 HTTP/1.1" 200 409871 "-" "python-requests/2.32"
+45.134.26.9 - - [13/Nov/2026:00:00:07 +0530] "GET /api/patients?page=3&size=500 HTTP/1.1" 200 411230 "-" "python-requests/2.32"
+45.134.26.9 - - [13/Nov/2026:00:00:10 +0530] "GET /api/patients?page=4&size=500 HTTP/1.1" 200 408112 "-" "python-requests/2.32"
+45.134.26.9 - - [13/Nov/2026:00:00:13 +0530] "GET /api/patients?page=5&size=500 HTTP/1.1" 200 233907 "-" "python-requests/2.32"
+45.134.26.9 - - [13/Nov/2026:00:00:15 +0530] "GET /api/patients?page=6&size=500 HTTP/1.1" 200 41 "-" "python-requests/2.32"
+2026-11-13 00:00:16 app WARN ReportController: user_id=9914 fetched 4188 reports not owned by caller in 63s (ownership check missing on /api/reports/{id})
+2026-11-13 00:00:16 app INFO PatientController: export rows=2284 fields=name,dob,phone,aadhaar_last4,address,test_name,result caller_user_id=9914
+2026-11-13 09:12:40 support INFO ticket=5521 "Patient says a stranger called quoting her thyroid report, caller knew DOB and phone 9876501234"
