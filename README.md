@@ -36,7 +36,7 @@ Set a Gemini key to use the model (get one in Google AI Studio):
 
 ```bash
 export GEMINI_API_KEY=...        # PowerShell: $env:GEMINI_API_KEY="..."
-export GEMINI_MODEL=gemini-flash-latest   # optional
+export GEMINI_MODEL=gemini-3.5-flash   # optional; falls back to gemini-3.5-flash-lite
 ```
 
 Without a key the app still works: the deterministic rules engine analyses the logs and the header shows "offline rules engine". Translation of the customer notice needs the key.

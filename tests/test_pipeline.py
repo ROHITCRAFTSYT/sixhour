@@ -129,3 +129,57 @@ def test_model_failure_falls_back_to_rules(monkeypatch):
 
 def test_clean_handles_garbage():
     assert clean({"timeline": [None, {"event": ""}], "personal_data": None}, 5)["timeline"] == []
+
+
+class _Resp:
+    def __init__(self, code: int, text: str = "{}"):
+        self.status_code = code
+        self._text = text
+
+    def raise_for_status(self):
+        if self.status_code >= 400:
+            import httpx
+
+            raise httpx.HTTPStatusError(str(self.status_code), request=None, response=self)
+
+    def json(self):
+        return {"candidates": [{"content": {"parts": [{"text": self._text}]}}]}
+
+
+def test_gemini_retries_then_uses_fallback_model(monkeypatch):
+    calls = []
+
+    def fake_post(url, **kwargs):
+        calls.append(url.split("/models/")[1].split(":")[0])
+        return _Resp(200, "ok") if "lite" in url else _Resp(503)
+
+    monkeypatch.setattr(gemini.httpx, "post", fake_post)
+    monkeypatch.setattr(gemini.time, "sleep", lambda s: None)
+    assert gemini._call({}) == "ok"
+    assert calls == ["gemini-3.5-flash"] * 3 + ["gemini-3.5-flash-lite"]
+
+
+def test_gemini_does_not_retry_client_errors(monkeypatch):
+    import httpx
+
+    calls = []
+    monkeypatch.setattr(gemini.httpx, "post", lambda url, **kw: calls.append(url) or _Resp(400))
+    with pytest.raises(httpx.HTTPStatusError):
+        gemini._call({})
+    assert len(calls) == 1
+
+
+def test_gemini_timeout_moves_to_fallback(monkeypatch):
+    import httpx
+
+    calls = []
+
+    def fake_post(url, **kwargs):
+        calls.append(url)
+        if "lite" in url:
+            return _Resp(200, "ok")
+        raise httpx.ReadTimeout("slow")
+
+    monkeypatch.setattr(gemini.httpx, "post", fake_post)
+    assert gemini._call({}) == "ok"
+    assert len(calls) == 2
